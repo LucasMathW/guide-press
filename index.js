@@ -1,7 +1,8 @@
 import express from 'express';
 import hl from 'handy-log';
+import morgan from 'morgan';
 import connection from './src/database/database.js';
-import routes from './src/routes.js'
+import routes from './src/routes.js';
 
 const PORT = 3333;
 const app = express();
@@ -19,7 +20,8 @@ connection
     console.log(err);
   });
 
-app.use(routes)
+app.use(routes);
+app.use(morgan('tiny'));
 
 app.listen(PORT, () => {
   hl.rainbow(`app is running on port: ${PORT}`);

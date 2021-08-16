@@ -3,23 +3,23 @@ import connection from '../../../database/database.js';
 import Category from '../../categories/model/Category.js';
 
 const Article = connection.define('articles', {
-  title:{
+  title: {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  slug:{
+  slug: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
-  body:{
+  body: {
     type: Sequelize.TEXT,
-    allowNull: false
-  }
-})
+    allowNull: false,
+  },
+});
 
 Category.hasMany(Article);
 Article.belongsTo(Category);
 
-Article.sync({force: false}).then(()=>{})
+Article.sync({ force: false }).then(() => {});
 
 export default Article;

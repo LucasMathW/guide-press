@@ -1,26 +1,66 @@
-import  express from 'express';
+import slugify from 'slugify';
 import Category from './model/Category.js';
-import slugify from 'slugify'
 
 export default {
-  async index(req, res){
-     res.render('admin/categories/new');
+  async new(req, res) {
+    res.render('admin/categories/new');
   },
 
-  async save(req, res){
-    const title = req.body.title;
+  async save(req, res) {
+    const { title } = req.body;
 
-    if(title !== undefined){
-      const newCategory = await Category.create({
-        title: title,
-        slug: slugify(title)
+    if (title !== undefined) {
+      await Category.create({
+        title,
+        slug: slugify(title),
       });
-      console.log('newCategory', newCategory);
-      return res.json({ category : newCategory})
-      // res.redirect("/admin/categories");
-    }else{
-      res.redirect("/admin/categories/new");
+      res.redirect('/admin/categories');
     }
+    res.redirect('/admin/categories/new');
+  },
 
-  }
-}
+  async categories(req, res) {
+    const categories = await Category.findAll();
+    res.render('admin/categories/index', { categories });
+  },
+
+  async delete(req, res) {
+    const { id } = req.body;
+    if (id !== undefined) {
+      // eslint-disable-next-line no-restricted-globals
+      if (isNaN(id)) {
+        res.redirect('/admin/categories');
+      } else {
+        await Category.destroy({
+          where: { id },
+        });
+        res.redirect('/admin/categories');
+      }
+    } else {
+      res.redirect('/admin/categories');
+    }
+  },
+
+  async edit(req, res) {
+    const { id } = req.params;
+    const category = await Category.findByPk(id);
+    if (!category) {
+      res.redirect('/admin/categories');
+    }
+    res.render('admin/categories/edit', { category });
+  },
+
+  async update(req, res) {
+    const { title } = req.body;
+    const { id } = req.body;
+
+    const body = {
+      title,
+      slug: slugify(title),
+    };
+
+    await Category.update(body, { where: { id } });
+
+    res.redirect('/admin/categories');
+  },
+};
