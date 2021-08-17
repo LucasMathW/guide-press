@@ -28,13 +28,12 @@ export default {
   async save(req, res) {
     const { title, category, body } = req.body;
     const slug = slugify(title);
-    const article = await Article.create({
+    await Article.create({
       title,
       slug,
       body,
       categoryId: category,
     });
-    console.log(article);
     res.redirect('/admin/articles');
   },
 
@@ -60,17 +59,12 @@ export default {
       id, title, body, category,
     } = req.body;
 
-    console.log('TITLE', title);
-    console.log('ARTIGO', category);
-
     const requestBody = {
       title,
       slug: slugify(title),
       body,
       categoryId: category,
     };
-
-    // console.log('body', requestBody);
 
     await Article.update(requestBody, { where: { id } });
 
