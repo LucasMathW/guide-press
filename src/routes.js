@@ -15,6 +15,11 @@ routes.post('/categories/delete', CategoryController.delete);
 routes.post('/categories/update', CategoryController.update);
 
 // Article Routes
-routes.get('/article', ArticleController.index);
+routes.get('/admin/articles/new', ArticleController.new);
+routes.get('/admin/articles', ArticleController.articles);
+routes.get('/admin/articles/edit/:id', ArticleController.edit);
 
+routes.post('/articles/save', ArticleController.save);
+routes.post('/articles/delete', ArticleController.delete);
+routes.post('/articles/update', ArticleController.update);
 export default routes;
